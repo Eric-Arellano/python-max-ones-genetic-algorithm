@@ -13,15 +13,15 @@ from src.models import Individual, Population, PopulationStr, stringify_populati
 # -------------------------------------------------------
 
 
-def total_fitness(pop: Population) -> int:
+def total_fitness(pop: Population) -> float:
     return sum(operators.fitness(ind) for ind in pop)
 
 
-def avg_fitness(pop: Population) -> int:
+def avg_fitness(pop: Population) -> float:
     return total_fitness(pop) / len(pop)
 
 
-def max_fitness(pop: Population) -> int:
+def max_fitness(pop: Population) -> float:
     return max(operators.fitness(ind) for ind in pop)
 
 
@@ -34,15 +34,15 @@ def gens_to_population(generations: List[Population]) -> Dict[int, PopulationStr
     return {i: stringify_population(pop) for i, pop in enumerate(generations)}
 
 
-def gens_to_max_fitness(generations: List[Population]) -> Dict[int, int]:
+def gens_to_max_fitness(generations: List[Population]) -> Dict[int, float]:
     return {i: max_fitness(pop) for i, pop in enumerate(generations)}
 
 
-def gens_to_avg_fitness(generations: List[Population]) -> Dict[int, int]:
+def gens_to_avg_fitness(generations: List[Population]) -> Dict[int, float]:
     return {i: avg_fitness(pop) for i, pop in enumerate(generations)}
 
 
-def gens_to_complete_analysis(generations: List[Population]) -> Dict[int, int]:
+def gens_to_complete_analysis(generations: List[Population]) -> Dict[int, Dict[str, Union[float, List[str]]]]:
     return {
         i: {
             "avg_fitness": avg_fitness(pop),

@@ -1,5 +1,5 @@
 import random
-from typing import List
+from typing import List, Tuple
 
 from src.models import Individual, Population
 
@@ -22,7 +22,7 @@ def gen_population(*, num_ind: int, num_genes: int) -> Population:
 # --------------------------------------------------------
 
 
-def fitness(ind: Individual) -> int:
+def fitness(ind: Individual) -> float:
     return sum(ind) / len(ind)
 
 
@@ -42,7 +42,7 @@ def mutate(ind: Individual, *, p: float) -> Individual:
 
 def crossover(
     ind1: Individual, ind2: Individual, *, p: float
-) -> (Individual, Individual):
+) -> Tuple[Individual, Individual]:
     if random.random() >= p:
         return (ind1, ind2)
     cross_point = random.randrange(1, len(ind1))
