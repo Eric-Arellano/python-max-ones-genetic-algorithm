@@ -13,4 +13,4 @@ if __name__ == "__main__":
         p_crossover=conf.p_crossover,
         p_mutation=conf.p_mutation,
     )
-    print(analysis.output_generations(result))
+    analysis.write_analysis(result, conf, analysis.generate_file_name("output"))

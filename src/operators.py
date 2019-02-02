@@ -23,15 +23,7 @@ def gen_population(*, num_ind: int, num_genes: int) -> Population:
 
 
 def fitness(ind: Individual) -> int:
-    return sum(ind)
-
-
-def avg_fitness(pop: Population) -> int:
-    return sum(fitness(ind) for ind in pop) / len(pop)
-
-
-def max_fitness(pop: Population) -> int:
-    return max(fitness(ind) for ind in pop)
+    return sum(ind) / len(ind)
 
 
 # --------------------------------------------------------
