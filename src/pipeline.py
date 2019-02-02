@@ -32,7 +32,7 @@ def run_ga(
     num_genes: int,
     tournament_size: int,
     p_crossover: float,
-    p_mutation: float
+    p_mutation: float,
 ) -> List[Population]:
     initial_pop = operators.gen_population(num_ind=num_ind, num_genes=num_genes)
     curr_pop = initial_pop

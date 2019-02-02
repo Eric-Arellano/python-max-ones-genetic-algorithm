@@ -12,8 +12,6 @@ from src.models import Individual, Population, PopulationStr, stringify_populati
 # Fitness analysis
 # -------------------------------------------------------
 
-# TODO: somehow precompute fitness for every individual. Most analyses use it.
-
 
 def total_fitness(pop: Population) -> int:
     return sum(operators.fitness(ind) for ind in pop)
@@ -47,7 +45,6 @@ def gens_to_avg_fitness(generations: List[Population]) -> Dict[int, int]:
 def gens_to_complete_analysis(generations: List[Population]) -> Dict[int, int]:
     return {
         i: {
-            "total_fitness": total_fitness(pop),
             "avg_fitness": avg_fitness(pop),
             "max_fitness": max_fitness(pop),
             "population": stringify_population(pop),
@@ -62,8 +59,9 @@ def gens_to_complete_analysis(generations: List[Population]) -> Dict[int, int]:
 
 
 def aggregate(generations: List[Population]) -> Dict[str, Union[str, int, float]]:
+    num_generations = len(generations)
     total_avg_fitness = sum(total_fitness(pop) for pop in generations) / (
-        len(generations) * len(generations[0])
+        num_generations * len(generations[0])
     )
     total_max_fitness = max(max_fitness(pop) for pop in generations)
     return {
@@ -79,6 +77,14 @@ def aggregate(generations: List[Population]) -> Dict[str, Union[str, int, float]
             for i, pop in enumerate(generations)
             if avg_fitness(pop) >= total_avg_fitness
         ),
+        "ratio_gens_max_fitness_met": sum(
+            1 for pop in generations if max_fitness(pop) >= total_max_fitness
+        )
+        / num_generations,
+        "ratio_gens_avg_fitness_met": sum(
+            1 for pop in generations if avg_fitness(pop) >= total_avg_fitness
+        )
+        / num_generations,
     }
 
 
