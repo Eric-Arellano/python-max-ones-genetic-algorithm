@@ -2,6 +2,8 @@ import functools
 import random
 from typing import List
 
+from tqdm import tqdm
+
 from src.models import Individual, Population
 from src import operators
 
@@ -41,8 +43,10 @@ def run_ga(
         p_crossover=p_crossover,
         p_mutation=p_mutation,
     )
-    for _ in range(num_generations):
+    print(f"Running genetic algorithm for {num_generations} generations!\n")
+    for _ in tqdm(range(num_generations)):
         new_pop = compute_generation(curr_pop)
         hist.append(new_pop)
         curr_pop = new_pop
+    print()
     return hist

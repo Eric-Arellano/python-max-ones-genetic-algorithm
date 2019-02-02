@@ -9,6 +9,7 @@ pylint = "*"
 black = "*"
 
 [packages]
+tqdm = "*"
 
 [requires]
 python_version = "3.7"
