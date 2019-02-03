@@ -8,6 +8,11 @@ from src import operators
 from src.config import Config
 from src.models import Individual, Population, PopulationStr, stringify_population
 
+import matplotlib
+
+matplotlib.use("TkAgg")
+from matplotlib import pyplot
+
 # -------------------------------------------------------
 # Fitness analysis
 # -------------------------------------------------------
@@ -42,7 +47,9 @@ def gens_to_avg_fitness(generations: List[Population]) -> Dict[int, float]:
     return {i: avg_fitness(pop) for i, pop in enumerate(generations)}
 
 
-def gens_to_complete_analysis(generations: List[Population]) -> Dict[int, Dict[str, Union[float, List[str]]]]:
+def gens_to_complete_analysis(
+    generations: List[Population]
+) -> Dict[int, Dict[str, Union[float, List[str]]]]:
     return {
         i: {
             "avg_fitness": avg_fitness(pop),
@@ -103,12 +110,37 @@ def write_analysis(generations: List[Population], config: Config, path: str) -> 
         pprint(output, stream=f, width=100, compact=True)
 
 
-def generate_file_name(dir_path: str) -> str:
-    current_files = glob(f"{dir_path}/run*.txt")
-    max_num = max(int(re.findall(r"\d{3}", f)[0]) for f in current_files)
-    return f"{dir_path}/run{max_num + 1:03d}.txt"
+def _generate_file_name(dir_path: str, prefix: str, extension: str) -> str:
+    current_files = glob(f"{dir_path}/{prefix}*.{extension}")
+    nums = {int(re.findall(r"\d{3}", f)[0]) for f in current_files} | {-1}
+    return f"{dir_path}/{prefix}{max(nums) + 1:03d}.{extension}"
+
+
+def generate_run_file_name(dir_path: str) -> str:
+    return _generate_file_name(dir_path, "run", "txt")
 
 
 # -------------------------------------------------------
 # Graphs
 # -------------------------------------------------------
+
+
+def graph(generations: List[Population], path: str) -> None:
+    max_fitness_data = gens_to_max_fitness(generations)
+    avg_fitness_data = gens_to_avg_fitness(generations)
+    open_circle_dotted_line = "o:"
+    pyplot.plot(
+        max_fitness_data.values(), f"b{open_circle_dotted_line}", label="max_fitness"
+    )
+    pyplot.plot(
+        avg_fitness_data.values(), f"g{open_circle_dotted_line}", label="avg_fitness"
+    )
+    pyplot.xlabel("Generation")
+    pyplot.ylabel("Fitness")
+    pyplot.title("Genetic algorithm performance")
+    pyplot.legend()
+    pyplot.savefig(path)
+
+
+def generate_graph_file_name(dir_path: str) -> str:
+    return _generate_file_name(dir_path, "graph", "png")
