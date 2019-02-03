@@ -2,7 +2,8 @@ import random
 
 from src import analysis, config, pipeline
 
-if __name__ == "__main__":
+
+def main() -> None:
     conf = config.read("resources/config.ini")
     random.seed(conf.seed)
     result = pipeline.run_ga(
@@ -15,3 +16,7 @@ if __name__ == "__main__":
     )
     analysis.write_analysis(result, conf, analysis.generate_run_file_name("output"))
     analysis.graph(result, analysis.generate_graph_file_name("output"))
+
+
+if __name__ == "__main__":
+    main()
